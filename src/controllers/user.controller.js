@@ -92,33 +92,30 @@ const registerUser = asyncHandler(async (req, res) => {
 
 const loginUser = asyncHandler(async (req, res) => {
   // Extract data from req.body
-  // Decide username or email  based
-  // Find  the user
-  // Password checck
-  // Generate Access Token and Refresh Token
-  // Send Token to  the  client[securel]
-  // Send Response to the client
+  console.log(req.body);
 
   const { email, username, password } = req.body;
 
-  if (!username || !email) {
-    throw new ApiError(400, "Username or Email is required ");
+  if (!username && !email) {
+    throw new ApiError(400, "Username or Email is required");
   }
 
-  const user = await User.findOne({ $or: [{ email, username }] });
+  // Find the user based on email or username
+  const user = await User.findOne({
+    $or: [{ email }, { username }],
+  });
 
   if (!user) {
-    throw new ApiError(404, "User does not exists ");
+    throw new ApiError(404, "User does not exist");
   }
 
+  // Validate password
   const isPasswordValid = await user.isPasswordCorrect(password);
-
   if (!isPasswordValid) {
-    throw new ApiError(401, "User does not exist");
+    throw new ApiError(401, "Invalid password");
   }
 
-  // Generate access and refresh Token:
-
+  // Generate access and refresh tokens
   const generateAccessTokenAndRefreshToken = async (userId) => {
     try {
       const user = await User.findById(userId);
@@ -126,32 +123,26 @@ const loginUser = asyncHandler(async (req, res) => {
       const refreshToken = user.generateRefreshToken();
 
       user.refreshToken = refreshToken;
-
       await user.save({ validateBeforeSave: false });
-
-      // Return Access Token and Refresh Token :
 
       return { accessToken, refreshToken };
     } catch (error) {
-      throw new ApiError(
-        500,
-        "Something went wrong while generating access and refresh token "
-      );
+      throw new ApiError(500, "Error generating tokens");
     }
   };
 
   const { accessToken, refreshToken } =
     await generateAccessTokenAndRefreshToken(user._id);
 
-  const loggedInUser = User.findById(user._id).select(
+  // Select user without sensitive information
+  const loggedInUser = await User.findById(user._id).select(
     "-password -refreshToken"
   );
 
-  // Send Cookie
-
+  // Send cookies
   const options = {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === "production", // Set to true in production
   };
 
   return res

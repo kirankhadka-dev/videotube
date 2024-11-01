@@ -1,0 +1,14 @@
+[33m0dbe7a8[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m Add auth middlewares
+[33mb11ed1f[m Fix issue with register controller
+[33m7acb611[m Fix  error in imports and typos
+[33m8a86a0f[m[33m ([m[1;31morigin/main[m[33m)[m Add register controlller
+[33m20ad4a6[m  All setup done
+[33ma772aa7[m  Configure multer
+[33m125df50[m  Configure cloudinary service for file upload
+[33mbc386d9[m  Model User and Video
+[33md265981[m Add utility
+[33m8e9c8df[m Add db - second approach
+[33mc67ce5b[m Add  db conneciton - first approach
+[33mc85233b[m Add prettier configuration
+[33m1e6a782[m Set up project files - [nodemon,.env]
+[33m8c5b0cb[m  First  commit
