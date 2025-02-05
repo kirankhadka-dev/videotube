@@ -1,0 +1,13 @@
+*.env
+
+.evv
+
+.env.sample 
+
+
+/.vsocode 
+
+/node_modules
+
+./dist
+
