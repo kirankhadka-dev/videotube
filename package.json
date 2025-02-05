@@ -1,0 +1,23 @@
+{
+  "name": "videotube",
+  "version": "1.0.0",
+  "description": "backend for videotube",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [
+    "\"",
+    "javascript",
+    "node",
+    "js",
+    "\""
+  ],
+  "author": "kiran",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
