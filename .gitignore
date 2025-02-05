@@ -117,4 +117,8 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+
+./todo.txt
+*.txt
+
 # End of https://mrkandreev.name/snippets/gitignore-generator/#Node
