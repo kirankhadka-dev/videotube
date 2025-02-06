@@ -1,17 +1,23 @@
 import express from "express";
 import {
+  changeCurrentPassword,
+  getCurrentuser,
+  getUserChannelProfile,
+  getWatchHistory,
   loginUser,
   logoutUser,
   refreshAccessToken,
   registerUser,
+  updateAccountDetails,
+  updateUserAvatar,
+  updateUserCoverImage,
 } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
-router.post(
-  "/register",
+router.route("/register").post(
   upload.fields([
     { name: "avatar", maxCount: 1 },
     { name: "coverImage", maxCount: 1 },
@@ -19,11 +25,23 @@ router.post(
   registerUser
 );
 
-router.post("/login", loginUser);
+router.route("/login").post(loginUser);
 
 // Secure routes: Protected routes
 
-router.post("/logout", verifyJWT, logoutUser);
-router.post("/refresh-token", verifyJWT, refreshAccessToken);
+router.route("/logout").post(verifyJWT, logoutUser);
+router.route("/refresh-token").post(verifyJWT, refreshAccessToken);
+router.route("/change-password").post(verifyJWT, changeCurrentPassword);
+router.route("/current-user").get(verifyJWT, getCurrentuser);
+router.route("/update-account").patch(verifyJWT, updateAccountDetails);
+router
+  .route("/avatar")
+  .patch(verifyJWT, upload.single("avatar"), updateUserAvatar);
+router
+  .route("/cover-image")
+  .patch(verifyJWT, upload.single("coverImage"), updateUserCoverImage);
+
+router.route("/c/:username").get(verifyJWT, getUserChannelProfile);
+router.route("/history").get(verifyJWT, getWatchHistory);
 
 export default router;
